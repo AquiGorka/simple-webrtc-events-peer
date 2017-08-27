@@ -7,13 +7,12 @@ class App extends Component {
   
   state = { status: '', data: {}, conn: null }
 
-  sendData() {
+  sendData = () => {
     const { conn } = this.state
-    setTimeout(() => conn.send('shake'), 1000)
-    setTimeout(() => conn.send('swipe-left'), 2000)
-    setTimeout(() => conn.send('swipe-right'), 3000)
-    setTimeout(() => conn.send('swipe-up'), 4000)
-    setTimeout(() => conn.send('swipe-down'), 5000)
+    const evs = ['swipe-left', 'swipe-right', 'swipe-up', 'swipe-down']
+    const ev = evs[Math.round(Math.random() * 3)]
+    conn.send(ev)
+    setTimeout(this.sendData, 2000)
   }
 
   componentDidMount() {
