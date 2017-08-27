@@ -1,6 +1,6 @@
 # Simple webrtc events peer
 
-Use this app to cConnect to another webrtc peer and send the connected peer events: shake, swipe-left, swipe-right, swipe-up, swipte-down
+Use this app to cConnect to another webrtc peer and send the connected peer events: swipe-left, swipe-right, swipe-up, swipte-down
 
 Use a query param pid to set the app namespace (checkout PeerJS)
 
