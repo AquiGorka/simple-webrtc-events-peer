@@ -2,21 +2,40 @@ import Peer from 'peerjs'
 import queryString from 'query-string'
 import config from '../config'
 import React, { Component } from 'react'
+import Hammer from 'hammerjs'
+import './App.css'
 
 class App extends Component {
   
   state = { status: '', data: {}, conn: null }
 
-  sendData = () => {
+  sendData = ev => {
     const { conn } = this.state
-    const evs = ['swipe-left', 'swipe-right', 'swipe-up', 'swipe-down']
-    const ev = evs[Math.round(Math.random() * 3)]
-    conn.send(ev)
-    setTimeout(this.sendData, 2000)
+    if (conn) {
+      // 2 left, 8 up, 4 right, 16 down
+      let dir = 'swipe-down'
+      switch(ev.direction){
+        case 2:
+          dir = 'swipe-left'
+          break
+        case 4:
+          dir = 'swipe-right'
+          break
+        case 8:
+          dir = 'swipe-up'
+          break
+      }
+      // console.log('Sending: ', dir)
+      conn.send(dir)
+    }
   }
 
   componentDidMount() {
     this.setState({ status: 'Init' })
+    // gestures
+    const hammertime = new Hammer(this.refs.app);
+    hammertime.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+    // p2p
     const parsed = queryString.parse(location.search)
     const pid = parsed.pid || 'pid'
     let peer
@@ -27,13 +46,14 @@ class App extends Component {
     //
     conn.on('open', () => {
       this.setState({ status: 'Connected', conn })
-      this.sendData()
+      hammertime.off('swipe', this.sendData)
+      hammertime.on('swipe', this.sendData);
     })
   }
 
   render() {
     const { status, data } = this.state
-    return <div className="App">
+    return <div className="App" ref="app">
       {`Status: ${status}; Data: ${JSON.stringify(data)}`}
     </div>
   }

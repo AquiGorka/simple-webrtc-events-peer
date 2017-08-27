@@ -9,6 +9,7 @@
     "start": "nwb serve-react-app"
   },
   "dependencies": {
+    "hammerjs": "^2.0.8",
     "peerjs": "^0.3.14",
     "query-string": "^5.0.0",
     "react": "^15.6.1",
